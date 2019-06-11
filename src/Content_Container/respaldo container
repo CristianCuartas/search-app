@@ -1,29 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { runInThisContext } from 'vm';
+import ContentComponent from './contentComponent';
+import data from '../Services/data.json';
+import Nav from '../SearchNavbar/searchNav';
 
 class ContainerComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: this.props.dataContainer
+      getData: ''
     };
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.data !== prevState.data) {
-      return console.log({ data: nextProps.data });
-    }
-    return null;
-  }
+  handleCallback = dataSearch => {
+    this.setState({ getData: dataSearch });
+  };
 
-  componentDidUpdate(previousProps, previousState) {
-    if (previousState.data !== this.props.dataContainer) {
-      this.setState({
-        data: this.props.dataContainer
-      });
-    }
-  }
+  //   componentDidMount() {
+  //     this.setState({
+  //       data
+  //     });
+  //   }
+
   //   listIngredients = () => {
   //     // const { data } = this.state;
   //     return (
@@ -38,18 +36,14 @@ class ContainerComponent extends Component {
   //   };
 
   render() {
-    console.log(this.state.data);
+    console.log(this.state.getData);
     return (
       <div>
-        <p>Probando la data</p>
-        <div></div>
+        <Nav chargeData={this.handleCallback} />
       </div>
+      //   <ContentComponent {...this.state} ingredients={this.listIngredients()} />
     );
   }
 }
-
-ContainerComponent.propTypes = {
-  dataContainer: PropTypes.array.isRequired
-};
 
 export default ContainerComponent;
