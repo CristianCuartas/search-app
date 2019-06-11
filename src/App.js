@@ -6,7 +6,7 @@ import ContainerComponent from './Content_Container/containerComponent';
 function App() {
   return (
     <div className="App">
-      <ContainerComponent/>
+      <SearchNav/>
     </div>
   );
 }

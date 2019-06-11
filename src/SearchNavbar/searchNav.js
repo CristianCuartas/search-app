@@ -8,18 +8,26 @@ class SearchNav extends Component{
         this.state={
             q:'',
             param:{},
+            getData:[],
         };
     }
 
-    getDataSearch = (callback) => {
+    getDataSearch = () => {
         fetch(`https://api.edamam.com/search?q=${this.state.q}&app_id=${credentials.APP_ID}&app_key=${credentials.APP_KEY}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data.hits);
-                callback(data.hits);
+                this.setState({getData:data.hits})
+                console.log(this.state.getData);
             }).catch(Error => {
                 console.log(Error)
-            });
+            }); 
+    }
+
+    handleCallback = ()=>{
+        let {children: resData}=this.props;
+        return (
+           resData({getData:this.state.getData})
+        );
     }
 
     handleGetDat = e =>{
@@ -29,6 +37,7 @@ class SearchNav extends Component{
     }
 
     render(){
+        this.handleCallback();
         // console.log(this.state.q);
         // console.log(this.state.param);
         return(

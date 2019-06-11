@@ -13,7 +13,7 @@ class  ContainerComponent extends Component {
 
 componentDidMount(){
         this.setState({
-            data: 
+            data: data
         })
     }
 
