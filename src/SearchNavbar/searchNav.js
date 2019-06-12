@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
   Navbar,
   Nav,
@@ -10,9 +9,11 @@ import {
   Container,
   Col,
   Row,
-  Form
+  Form,
+  Collapse
 } from 'reactstrap';
 import IMG from '../img/img.svg';
+import NOTFOUND from '../img/giphy.gif';
 import credentials from '../Services/credentials';
 
 class SearchNav extends Component {
@@ -21,9 +22,25 @@ class SearchNav extends Component {
     this.state = {
       q: '',
       param: {},
-      getData: []
+      getData: '',
+      collapse: true,
+      empty: false
     };
   }
+
+  toggle = () => {
+    this.setState({ collapse: false });
+  };
+
+  emptyRecipe = () => {
+    return (
+      <div>
+        <h1>
+          <b>404 NOT FOUND </b>
+        </h1>
+      </div>
+    );
+  };
 
   getDataSearch = () => {
     fetch(
@@ -32,8 +49,13 @@ class SearchNav extends Component {
       .then(res => res.json())
       .then(data => {
         this.setState({ getData: data.hits });
-        console.log(this.state.getData);
         this.props.onDataFecth(data.hits);
+        console.log(data.more);
+        if (data.more === false) {
+          this.setState(state => ({ empty: !state.empty }));
+        } else {
+          this.setState({ empty: false });
+        }
       })
       .catch(Error => {
         console.log(Error);
@@ -44,9 +66,11 @@ class SearchNav extends Component {
     e.preventDefault();
     this.setState({ param: this.state.q });
     this.getDataSearch();
+    this.toggle();
   };
 
   render() {
+    console.log(this.state.empty);
     return (
       <div>
         <Navbar color="light" light expand="md">
@@ -67,7 +91,6 @@ class SearchNav extends Component {
                 </Col>
                 <Col md="4">
                   <NavItem>
-                    {/* onClick={this.getDataSearch()} */}
                     <Button
                       type="button"
                       outline
@@ -84,14 +107,32 @@ class SearchNav extends Component {
             </Form>
           </Nav>
         </Navbar>
-        <div style={{ marginTop: '150px' }}></div>
-        <Container>
-          <Row>
-            <Col>
-              <img src={IMG} />
-            </Col>
-          </Row>
-        </Container>
+        <Collapse isOpen={this.state.collapse}>
+          <div style={{ marginTop: '150px' }}>
+            <Container>
+              <Row>
+                <Col>
+                  <img src={IMG} />
+                </Col>
+              </Row>
+            </Container>
+          </div>
+        </Collapse>
+        {this.state.empty === true ? (
+          <div style={{ marginTop: '100px' }}>
+            <Container>
+              <Row>
+                <Col>
+                  <h1>Oppppps!</h1>
+                  <h3>No contamos con esta receta.</h3>
+
+                  <br />
+                  <img src={NOTFOUND} />
+                </Col>
+              </Row>
+            </Container>
+          </div>
+        ) : null}
       </div>
     );
   }

@@ -1,49 +1,87 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  CardText
+} from 'reactstrap';
 import ContentComponent from './contentComponent';
-import data from '../Services/data.json';
-import Nav from '../SearchNavbar/searchNav';
 
 class ContainerComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      getData: ''
+      data: this.props.dataContainer
     };
   }
 
-  handleCallback = dataSearch => {
-    this.setState({ getData: dataSearch });
-  };
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.data !== prevState.data) {
+      return console.log({ data: nextProps.data });
+    }
+    return null;
+  }
 
-  //   componentDidMount() {
-  //     this.setState({
-  //       data
-  //     });
-  //   }
+  componentDidUpdate(previousProps, previousState) {
+    if (previousState.data !== this.props.dataContainer) {
+      this.setState({
+        data: this.props.dataContainer
+      });
+    }
+    // this.showLabel();
+  }
 
-  //   listIngredients = () => {
-  //     // const { data } = this.state;
-  //     return (
-  //       <ul>
-  //         {data.map(item => (
-  //           <li key={item.recipe.ingredientLines}>
-  //             {item.recipe.ingredientLines[0]}
-  //           </li>
-  //         ))}
-  //       </ul>
-  //     );
-  //   };
+  // showLabel = () => {
+  //   const { data } = this.state;
+  //   const label = data.map(item => this.setState({ label: item.recipe }));
+  //   return console.log(label);
+  // };
 
   render() {
-    console.log(this.state.getData);
-    return (
-      <div>
-        <Nav chargeData={this.handleCallback} />
-      </div>
-      //   <ContentComponent {...this.state} ingredients={this.listIngredients()} />
-    );
+    console.log(this.state.data);
+    return <ContentComponent {...this.state} />;
   }
 }
 
+ContainerComponent.propTypes = {
+  dataContainer: PropTypes.array.isRequired
+};
+
 export default ContainerComponent;
+
+// listIngredients = () => {
+//   const { data } = this.state;
+//   return (
+//     <ul>
+//       {data.map(item => (
+//         <li key={item.recipe.ingredientLines}>
+//           {item.recipe.ingredientLines[0]}
+//         </li>
+//       ))}
+//     </ul>
+//   );
+// };
+/* RENDER => */
+// <div>
+// <Container>
+//   <Row className="justify-content-center">
+//     <Col md="8">
+//       <Card className="p-4">
+//         <CardBody>
+//           <CardTitle>Pollo frito</CardTitle>
+//           <CardSubtitle>Ingredientes</CardSubtitle>
+//           <CardBody>
+//             {/* this.imgRecipe() */}
+//             <CardText>{this.listIngredients()}</CardText>
+//           </CardBody>
+//         </CardBody>
+//       </Card>
+//     </Col>
+//   </Row>
+// </Container>
+// </div>
